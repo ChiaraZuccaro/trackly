@@ -5,6 +5,7 @@ const router = Router();
 
 router.post('/register', registerUser);
 router.post('/login', logUserIn);
+router.post('/recover-pw'); // TODO
 
 router.get('/profile', () => {});
 

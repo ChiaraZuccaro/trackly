@@ -8,19 +8,20 @@ export class ApiResponse {
 
   constructor(
     code: RespCodes,
-    msgCatalog: Record<RespCodes, string>,
+    msgCatalog: Partial<Record<RespCodes, string>>,
     isError = false
   ) {
     this.code = code;
-    this.message = msgCatalog[code];
+    this.message = msgCatalog[code] || 'Errore generico';
     this.error = isError;
   }
   
-  public async send(res: Response) {
+  public async send(res: Response, data?: any) {
     res.status(this.code).json({
       code: this.code,
       message: this.message,
-      error: this.error
-    })
+      error: this.error,
+      data
+    });
   }
 }
