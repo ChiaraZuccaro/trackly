@@ -3,6 +3,11 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@services/*": ["src/app/services/*"],
+      "@pages/*": ["src/app/pages/*"]
+    },
     "strict": true,
     "strictPropertyInitialization": false,
     "noImplicitOverride": true,
