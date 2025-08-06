@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Credentials } from '@interfaces/auth.interface';
 import { env } from 'src/enviroment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class Auth {
   private readonly baseUrl = env.api + '/auth';
   private _http = inject(HttpClient);
@@ -15,7 +14,7 @@ export class Auth {
     return this._http.post(url, params)
   }
 
-  public login(params: any) {
+  public login(params: Credentials) {
     const url = this.baseUrl + '/login';
 
     return this._http.post(url, params)

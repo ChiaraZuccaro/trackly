@@ -6,6 +6,7 @@
     "baseUrl": "./",
     "paths": {
       "@services/*": ["src/app/services/*"],
+      "@interfaces/*": ["src/app/interfaces/*"],
       "@pages/*": ["src/app/pages/*"]
     },
     "strict": true,
