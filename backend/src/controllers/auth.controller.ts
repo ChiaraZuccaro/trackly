@@ -10,14 +10,15 @@ export async function registerUser(req: Request, res: Response) {
 
     await auth.register();
     await new ApiResponse(RespCodes.CREATED, RegisterMessages).send(res);
-    logUserIn(req, res);
-    
+
   } catch (error) {
-    const isErrorCode = typeof Number(error) === 'number';
-    if(isErrorCode) {
+    const isError = true;
+    if (typeof error === 'number' && !Number.isNaN(error)) {
       const errCode = error as RespCodes;
-      new ApiResponse(errCode, RegisterMessages, true).send(res);
-    } 
+      new ApiResponse(errCode, LoginMessages, isError).send(res);
+    } else {
+      new ApiResponse(RespCodes.INTERNAL_SERVER_ERROR, LoginMessages, isError).send(res);
+    }
   }
 }
 
@@ -29,10 +30,12 @@ export async function logUserIn(req: Request, res: Response) {
     await new ApiResponse(RespCodes.OK, LoginMessages).send(res, { ...data });
 
   } catch (error) {
-    const isErrorCode = typeof Number(error) === 'number';
-    if(isErrorCode) {
+    const isError = true;
+    if (typeof error === 'number' && !Number.isNaN(error)) {
       const errCode = error as RespCodes;
-      new ApiResponse(errCode, LoginMessages, true).send(res);
+      new ApiResponse(errCode, LoginMessages, isError).send(res);
+    } else {
+      new ApiResponse(RespCodes.INTERNAL_SERVER_ERROR, LoginMessages, isError).send(res);
     }
   }
 }

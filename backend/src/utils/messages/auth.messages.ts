@@ -11,6 +11,7 @@ export const RegisterMessages: Partial<Record<RespCodes, string>> = {
 
 export const LoginMessages: Partial<Record<RespCodes, string>> = {
   [RespCodes.OK]: "Login eseguito con successo!!",
-  [RespCodes.BAD_REQUEST]: "Utente non trovato oppure credenziali errate!",
+  [RespCodes.NOT_FOUND]: "Utente non trovato!",
+  [RespCodes.BAD_REQUEST]: "Credenziali errate!",
   [RespCodes.UNAUTHORIZED]: "Password non valida!",
 }

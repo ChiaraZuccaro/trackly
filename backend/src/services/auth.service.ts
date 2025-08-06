@@ -32,9 +32,9 @@ export class AuthService {
   public async login() {
     const user: LoginUser = this.request.body;
     const findedUser = await prisma.user.findUnique({ where: { email: user.email } });
+    if(!findedUser) throw RespCodes.NOT_FOUND;
+
     const userEty = new User(findedUser);
-    
-    if(!findedUser) throw RespCodes.BAD_REQUEST;
     if(!user.email || !user.pw) throw RespCodes.BAD_REQUEST;
 
     const isPwCorrect = await bcrypt.compare(user.pw, userEty.password);
