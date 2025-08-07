@@ -11,9 +11,9 @@ export class Login implements OnInit {
   private _auth = inject(Auth);
 
   ngOnInit() {
-    this._auth.login({ email: 'nonso@ok.com', password: 'password' }).subscribe(resp => {
-      console.log(resp);
+    // this._auth.login({ email: 'nonso@ok.com', password: 'password' }).subscribe(resp => {
+    //   console.log(resp);
       
-    })
+    // })
   }
 }
