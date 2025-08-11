@@ -10,11 +10,12 @@ export const FORM_CONFIG: Record<FormType, FormConfig> = {
         controlName: 'email',
         type: 'email',
         errs: [],
-        validators: [ Validators.required ],
+        validators: [ Validators.required, Validators.email ],
         isRequired: true,
         errsMessage: {
           idName: 'emailError',
-          required: 'Email obbligatoria'
+          required: 'Email obbligatoria',
+          email: 'Inserisci un formato email valido'
         }
       },
       {
@@ -30,7 +31,8 @@ export const FORM_CONFIG: Record<FormType, FormConfig> = {
           required: 'Password obbligatoria'
         }
       }
-    ]
+    ],
+    method: 'login'
   },
   register: {
     inputs: [
@@ -75,6 +77,7 @@ export const FORM_CONFIG: Record<FormType, FormConfig> = {
           required: 'Inserisci un nome, sapremo come vorrai essere chiamato'
         }
       }
-    ]
+    ],
+    method: 'register'
   }
 }

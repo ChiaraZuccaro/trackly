@@ -4,11 +4,11 @@ import { Credentials } from '@interfaces/auth.interface';
 import { env } from 'src/enviroment';
 
 @Injectable({ providedIn: 'root' })
-export class Auth {
+export class AuthService {
   private readonly baseUrl = env.api + '/auth';
   private _http = inject(HttpClient);
 
-  public register(params: any) {
+  public register(params: Credentials) {
     const url = this.baseUrl + '/register';
 
     return this._http.post(url, params)

@@ -1,8 +1,15 @@
-import { FormControl, ValidatorFn } from "@angular/forms";
+import { ValidatorFn } from "@angular/forms";
+import { AuthService } from "@services/auth";
 
 export type FormType = 'login' | 'register';
 export type ControlName = 'email' | 'password' | 'name';
 export type InputType = 'email' | 'password' | 'text';
+export type AuthServiceMethods = {
+  login: (params: Credentials) => ReturnType<AuthService['login']>;
+  register: (params: Credentials) => ReturnType<AuthService['register']>;
+  // resetPassword: (email: string) => ReturnType<AuthService['resetPassword']>;
+};
+
 
 export interface ErrsMessage {
   idName: string,
@@ -24,10 +31,11 @@ export interface InputConfig {
 
 export interface FormConfig {
   inputs: InputConfig[],
+  method: keyof AuthServiceMethods
 }
 
 export interface Credentials {
   email: string,
-  password: string,
+  pw: string,
   name?: string
 }

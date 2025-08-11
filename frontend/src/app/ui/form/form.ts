@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ErrsMessage, FormConfig, FormType, InputConfig } from '@interfaces/auth.interface';
+import { Credentials, ErrsMessage, FormConfig, FormType, InputConfig } from '@interfaces/auth.interface';
+import { AuthService } from '@services/auth';
 import { ProviderData } from '@services/provider-data';
 import { map } from 'rxjs';
 
@@ -12,6 +13,7 @@ import { map } from 'rxjs';
   styleUrl: './form.scss'
 })
 export class LocalForm {
+  private _auth = inject(AuthService);
   private _provider = inject(ProviderData);
   private _formBuilder = inject(NonNullableFormBuilder);
   private _route = inject(ActivatedRoute)
@@ -77,11 +79,11 @@ export class LocalForm {
 
     if (this.logForm.invalid) { this.logForm.markAllAsTouched(); return; }
     
-    
-    console.log('loggata');
-    // this._auth.login({ email: 'nonso@ok.com', password: 'password' }).subscribe(resp => {
-    //   console.log(resp);
+    const test: Credentials = { email: 'nonso@ok.com', pw: 'password' }
 
-    // })
+    this._auth[this.formConfig.method](test).subscribe({
+      next: resp => console.log(resp),
+      error: err => console.error(err)
+    })
   }
 }
