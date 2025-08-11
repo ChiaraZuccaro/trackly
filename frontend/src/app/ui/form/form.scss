@@ -1,0 +1,22 @@
+form {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1.5rem;
+
+  .labels {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+
+    input {
+      border-bottom: 1px black solid;
+    }
+  }
+
+  #sub_btn {
+    align-self: center;
+    border: 1px green solid;
+    width: 50%;
+    padding: .3rem 0;
+  }
+}

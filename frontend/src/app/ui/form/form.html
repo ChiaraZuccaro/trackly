@@ -1,0 +1,29 @@
+<form [formGroup]="logForm" class="inputs-container" (ngSubmit)="logIn()">
+  @if(formConfig) {
+    @let inputs = formConfig.inputs;
+
+    @for (input of inputs; track $index) {
+      <label class="labels" [for]="input.id">
+        <span>{{ input.label }}</span>
+        <input
+          [type]="input.type"
+          [name]="input.id"
+          [id]="input.id"
+          [formControlName]="input.controlName"
+          [required]="input.isRequired"
+          [attr.aria-describedby]="input.errsMessage.idName"
+          [attr.aria-required]="input.isRequired"
+        />
+
+        @if (invalidControls[input.controlName]) {
+          <div [id]="input.errsMessage.idName">
+            @for(errKey of input.errs; track $index) {
+              <small>{{ input.errsMessage[errKey] }}</small>
+            }
+          </div>
+        }
+      </label>
+    }
+    <button id="sub_btn" type="submit">Login</button>
+  }
+</form>

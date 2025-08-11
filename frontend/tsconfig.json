@@ -9,6 +9,7 @@
       "@interfaces/*": ["src/app/interfaces/*"],
       "@pages/*": ["src/app/pages/*"],
       "@utils/*": ["src/app/utils/*"],
+      "@ui/*": ["src/app/ui/*"],
       "@data/*": ["src/data/*"]
     },
     "strict": true,
