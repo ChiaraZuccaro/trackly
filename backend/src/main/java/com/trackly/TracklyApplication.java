@@ -1,4 +1,4 @@
-package com.trackly.trackly;
+package com.trackly;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
