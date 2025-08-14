@@ -13,20 +13,20 @@ public class Expense {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false) // importo obbligatorio
+  @Column(nullable = false)
   private BigDecimal amount;
 
   @Column(length = 255) // opzionale
   private String description;
 
-  @Column(nullable = false) // data obbligatoria
+  @Column(nullable = false)
   private LocalDate date;
 
   @Column(nullable = false)
   private boolean isRecurring;
 
   @Enumerated(EnumType.STRING)
-  private RecurrenceType recurrenceType;
+  private RecurrenceType recurrenceType = RecurrenceType.NONE;
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
