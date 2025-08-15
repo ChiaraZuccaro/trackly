@@ -6,6 +6,7 @@ import { env } from 'src/enviroment';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly baseUrl = env.api + '/auth';
+  private readonly basePWUrl = this.baseUrl + '/password';
   private _http = inject(HttpClient);
 
   public register(params: Credentials) {
@@ -20,8 +21,14 @@ export class AuthService {
     return this._http.post(url, params)
   }
 
+  public recoverPassword(email: string) {
+    const url = this.basePWUrl + '/recover';
+
+    return this._http.post(url, email)
+  }
+
   public resetPassword(email: string) {
-    const url = this.baseUrl + '/recover_pw';
+    const url = this.basePWUrl + '/reset';
 
     return this._http.post(url, email)
   }
