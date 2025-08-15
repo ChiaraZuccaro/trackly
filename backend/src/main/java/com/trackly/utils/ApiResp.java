@@ -6,36 +6,31 @@ import com.trackly.enums.RespCode;
 
 public class ApiResp<T> {
 
-  private final RespCode code;
+  private final int code;
   private final String message;
   private final boolean error;
   private final T data;
 
-  // Costruttore principale
   public ApiResp(RespCode code, String message, boolean error, T data) {
-    this.code = code;
+    this.code = code.getCode();
     this.message = message;
     this.error = error;
     this.data = data;
   }
 
-  // Costruttore secondario, senza dati
   public ApiResp(RespCode code, String message) {
     this(code, message, false, null);
   }
 
-  // Costruttore secondario, con flag errore ma senza dati
   public ApiResp(RespCode code, String message, boolean error) {
     this(code, message, error, null);
   }
 
-  // Metodo send tipizzato e senza warning
   public ResponseEntity<ApiResp<T>> send() {
-    return ResponseEntity.status(this.code.getCode()).body(this);
+    return ResponseEntity.status(code).body(this); // status numerico
   }
 
-  // Getter
-  public RespCode getCode() { return code; }
+  public int getCode() { return code; }  // ora restituisce int
   public String getMessage() { return message; }
   public boolean isError() { return error; }
   public T getData() { return data; }

@@ -7,7 +7,7 @@ import com.trackly.enums.RespCode;
 public class Messages {
   public static final Map<RespCode, String> RegisterMessages = Map.of(
     RespCode.OK, "L'utente è stato creato con successo!",
-    RespCode.BAD_REQUEST, "Richiesta non valida!",
+    RespCode.BAD_REQUEST, "Qualcosa manca! Controlla",
     RespCode.UNAUTHORIZED, "Autenticazione fallita",
     RespCode.NOT_FOUND, "Qualcosa è andato storto!",
     RespCode.CONFLICT, "Esiste già un utente con questa email!",
