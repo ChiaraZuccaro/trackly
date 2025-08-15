@@ -17,19 +17,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class SecurityConfig {
 
-  private final JwtAuthFilter jwtAuthFilter;
   private List<String> allowedOrigins;
   private List<String> allowedMethods;
   private List<String> noTokenCall;
 
-  public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
-    this.jwtAuthFilter = jwtAuthFilter;
-
-    this.allowedOrigins = List.of(
-      "http://localhost:1008"
-      // "https://tuo-dominio.com"
-    );
-
+  public SecurityConfig() {
+    this.allowedOrigins = List.of("http://localhost:1008");
     this.allowedMethods = List.of("GET", "POST", "PUT", "DELETE", "OPTIONS");
     this.noTokenCall = List.of(
       "/trackly/auth/login",
@@ -38,29 +31,26 @@ public class SecurityConfig {
     );
   }
 
-  private CorsConfiguration createCors() {
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowedOrigins(allowedOrigins);
     config.setAllowedMethods(allowedMethods);
     config.setAllowCredentials(true);
     config.setAllowedHeaders(List.of("*"));
 
-    return config;
-  }
-
-  @Bean
-  public PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
-
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", createCors());
+    source.registerCorsConfiguration("/**", config);
     return source;
   }
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+  public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
     http.csrf(csrf -> csrf.disable())
       .cors(cors -> cors.configurationSource(corsConfigurationSource()))
       .authorizeHttpRequests(auth -> auth
