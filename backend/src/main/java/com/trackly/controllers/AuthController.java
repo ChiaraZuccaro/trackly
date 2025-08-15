@@ -1,6 +1,7 @@
 package com.trackly.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,9 @@ import com.trackly.utils.CodeException;
 import com.trackly.utils.ApiResp;
 import com.trackly.utils.Messages;
 
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
+
 @RestController
 @RequestMapping("/trackly/auth")
 public class AuthController {
@@ -21,6 +25,18 @@ public class AuthController {
 
   public AuthController(AuthService authService) {
     this.authService = authService;
+  }
+
+  private Cookie createTokenCookie(String token) {
+    int tokenAge = 24 * 60 * 60; // durata 1 giorno
+    Cookie jwtCookie = new Cookie("jwt", token);
+    jwtCookie.setHttpOnly(true);
+    jwtCookie.setSecure(false); // solo HTTPS, puoi mettere false in dev
+    jwtCookie.setPath("/"); // disponibile per tutta l'app
+    jwtCookie.setMaxAge(tokenAge);
+    jwtCookie.setAttribute("Samesite", "none");
+
+    return jwtCookie;
   }
 
   private String getMessage(RespCode code, String type) {
@@ -45,7 +61,7 @@ public class AuthController {
       return new ApiResp(RespCode.OK, msg).send();
 
     } catch (CodeException e) {
-      
+
       String msg = getMessage(e.getCode(), typeMsgs);
       return new ApiResp(e.getCode(), msg, true).send();
     } catch (Exception e) {
@@ -56,10 +72,13 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<ApiResp> login (@RequestBody LoginUserDto request) {
+  public ResponseEntity<ApiResp> login(@RequestBody LoginUserDto request, HttpServletResponse response) {
     String typeMsgs = "login";
     try {
-      authService.loginUser(request);
+      String token = authService.loginUser(request);
+
+      Cookie jwtCookie = createTokenCookie(token);
+      response.addCookie(jwtCookie);
 
       String msg = getMessage(RespCode.OK, typeMsgs);
       return new ApiResp(RespCode.OK, msg).send();
