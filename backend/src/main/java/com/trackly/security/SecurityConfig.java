@@ -27,7 +27,8 @@ public class SecurityConfig {
     this.noTokenCall = List.of(
       "/trackly/auth/login",
       "/trackly/auth/register",
-      "/trackly/auth/recover-password"
+      "/trackly/auth/password/recover",
+      "/trackly/auth/password/reset"
     );
   }
 
