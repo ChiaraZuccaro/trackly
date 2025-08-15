@@ -1,7 +1,8 @@
 package com.trackly.controllers;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,7 +85,7 @@ public class AuthController {
       return new ApiResp(RespCode.OK, msg).send();
 
     } catch (CodeException e) {
-      
+
       String msg = getMessage(e.getCode(), typeMsgs);
       return new ApiResp(e.getCode(), msg, true).send();
     } catch (Exception e) {
@@ -94,23 +95,45 @@ public class AuthController {
     }
   }
 
-  // @PostMapping("/recover-password")
-  // public ResponseEntity<ApiResp> recoverPassword (@RequestBody LoginUserDto request) {
-  //   String typeMsgs = "login";
-  //   try {
-  //     authService.loginUser(request);
+  @PostMapping("/password/recover")
+  public ResponseEntity<ApiResp> recoverPassword(@RequestBody Map<String, String> body) {
+    String email = body.get("email");
+    String typeMsgs = "login";
 
-  //     String msg = getMessage(RespCode.OK, typeMsgs);
-  //     return new ApiResp(RespCode.OK, msg).send();
+    try {
+      authService.createPasswordResetToken(email);
 
-  //   } catch (CodeException e) {
-      
-  //     String msg = getMessage(e.getCode(), typeMsgs);
-  //     return new ApiResp(e.getCode(), msg, true).send();
-  //   } catch (Exception e) {
+      String msg = "Email inviata con istruzioni per il reset.";
+      return new ApiResp(RespCode.OK, msg).send();
 
-  //     String msg = getMessage(RespCode.INTERNAL_SERVER_ERROR, typeMsgs);
-  //     return new ApiResp(RespCode.INTERNAL_SERVER_ERROR, msg, true).send();
-  //   }
-  // }
+    } catch (CodeException e) {
+      String msg = getMessage(e.getCode(), typeMsgs);
+      return new ApiResp(e.getCode(), msg, true).send();
+    } catch (Exception e) {
+      String msg = getMessage(RespCode.INTERNAL_SERVER_ERROR, typeMsgs);
+      return new ApiResp(RespCode.INTERNAL_SERVER_ERROR, msg, true).send();
+    }
+  }
+
+  @PostMapping("/password/reset")
+  public ResponseEntity<ApiResp> resetPassword(@RequestBody Map<String, String> body) {
+    String token = body.get("token");
+    String newPassword = body.get("password");
+    String typeMsgs = "login";
+
+    try {
+      authService.resetPassword(token, newPassword);
+
+      String msg = "Password reimpostata con successo!";
+      return new ApiResp(RespCode.OK, msg).send();
+
+    } catch (CodeException e) {
+      String msg = getMessage(e.getCode(), typeMsgs);
+      return new ApiResp(e.getCode(), msg, true).send();
+    } catch (Exception e) {
+      String msg = getMessage(RespCode.INTERNAL_SERVER_ERROR, typeMsgs);
+      return new ApiResp(RespCode.INTERNAL_SERVER_ERROR, msg, true).send();
+    }
+  }
+
 }
