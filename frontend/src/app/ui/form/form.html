@@ -16,7 +16,7 @@
         />
 
         @if (invalidControls[input.controlName]) {
-          <div [id]="input.errsMessage.idName">
+          <div class="errors" [id]="input.errsMessage.idName">
             @for(errKey of input.errs; track $index) {
               <small>{{ input.errsMessage[errKey] }}</small>
             }

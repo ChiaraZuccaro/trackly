@@ -1,10 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { Credentials, ErrsMessage, FormConfig, FormType, InputConfig } from '@interfaces/auth.interface';
 import { AuthService } from '@services/auth';
 import { ProviderData } from '@services/provider-data';
-import { map } from 'rxjs';
 
 @Component({
   selector: 'local-form',
@@ -16,7 +14,8 @@ export class LocalForm {
   private _auth = inject(AuthService);
   private _provider = inject(ProviderData);
   private _formBuilder = inject(NonNullableFormBuilder);
-  private _route = inject(ActivatedRoute)
+
+  public formKey = input.required<FormType>();
 
   public logForm: FormGroup;
   public submitted: boolean;
@@ -27,12 +26,8 @@ export class LocalForm {
   public errors: ErrsMessage[];
 
   ngOnInit() {
-    this._route.url.pipe(
-      map(urlFrags => urlFrags[0].path)
-    ).subscribe(path => {
-      this.formConfig = this._provider.getFormConfig(path as FormType);
-      this.initForm();
-    });
+    this.formConfig = this._provider.getFormConfig(this.formKey());
+    this.initForm();
 
     this.logForm.statusChanges.subscribe(
       () => this.updateInvalidControls()
