@@ -67,7 +67,7 @@ export const FORM_CONFIG: Record<FormType, FormConfig> = {
       {
         label: 'Nome',
         id: 'name',
-        controlName: 'name',
+        controlName: 'username',
         type: 'text',
         errs: [],
         validators: [ Validators.required ],

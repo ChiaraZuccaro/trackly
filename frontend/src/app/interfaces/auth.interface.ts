@@ -2,7 +2,7 @@ import { ValidatorFn } from "@angular/forms";
 import { AuthService } from "@services/auth";
 
 export type FormType = 'login' | 'register';
-export type ControlName = 'email' | 'password' | 'name';
+export type ControlName = 'email' | 'password' | 'username';
 export type InputType = 'email' | 'password' | 'text';
 export type AuthServiceMethods = {
   login: (params: Credentials) => ReturnType<AuthService['login']>;
@@ -38,5 +38,5 @@ export interface FormConfig {
 export interface Credentials {
   email: string,
   password: string,
-  name?: string
+  username?: string
 }

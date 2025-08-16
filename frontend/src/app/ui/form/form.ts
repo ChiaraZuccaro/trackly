@@ -74,19 +74,35 @@ export class LocalForm {
     return Object.keys(control.errors) as (keyof ErrsMessage)[];
   }
 
+  private createCredentialsFromForm(): Credentials {
+    return Object.entries(this.logForm.controls).reduce(
+      (acc: any, [key, formControl]) => {
+        acc[key] = formControl.value;
+        return acc;
+      }, {}
+    );
+  }
+
   public logIn() {
     this.submitted = true;
     this.updateInvalidControls();
 
     if (this.logForm.invalid) { this.logForm.markAllAsTouched(); return; }
-
-    const test: Credentials = { email: 'nonso@ok.com', password: 'password' }
-
-    this._auth[this.formConfig.method](test).pipe(
+    
+    const data = this.createCredentialsFromForm();
+    this._auth[this.formConfig.method](data).pipe(
       finalize(() => this.hasResp.set(true))
     ).subscribe({
-      next: resp => this.modalJson.set(resp),
-      error: err => this.modalJson.set(err.error)
+      next: resp => this.modalJson.set({
+        ...resp,
+        type: this.formKey(),
+        btnMsg: 'Vai alla dashboard!'
+      }),
+      error: err => this.modalJson.set({
+        ...err.error,
+        type: this.formKey(),
+        btnMsg: 'Vai alla registrazione!'
+      })
     });
   }
 }
