@@ -1,12 +1,15 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { GeneralResp } from '@interfaces/api-resp.interface';
 import { Credentials, ErrsMessage, FormConfig, FormType, InputConfig } from '@interfaces/auth.interface';
 import { AuthService } from '@services/auth';
 import { ProviderData } from '@services/provider-data';
+import { Modal } from '@ui/modal/modal';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'local-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Modal],
   templateUrl: './form.html',
   styleUrl: './form.scss'
 })
@@ -24,6 +27,9 @@ export class LocalForm {
 
   public invalidControls: Record<string, boolean> = {};
   public errors: ErrsMessage[];
+
+  public hasResp = signal(false);
+  public modalJson = signal<GeneralResp>({} as GeneralResp);
 
   ngOnInit() {
     this.formConfig = this._provider.getFormConfig(this.formKey());
@@ -55,10 +61,10 @@ export class LocalForm {
     for (const controlName in allControls) {
       const control = allControls[controlName];
       this.invalidControls[controlName] = (control.touched || this.submitted) && control.invalid;
-      
+
       const findedInput = this.formConfig.inputs.find(inp => inp.controlName === controlName);
       const errs = this.getControlErrors(controlName);
-      if(findedInput) { findedInput.errs.push(...errs) }
+      if (findedInput) { findedInput.errs.push(...errs) }
     }
   }
 
@@ -73,12 +79,14 @@ export class LocalForm {
     this.updateInvalidControls();
 
     if (this.logForm.invalid) { this.logForm.markAllAsTouched(); return; }
-    
-    const test: Credentials = { email: 'nonso@ok.com', pw: 'password' }
 
-    this._auth[this.formConfig.method](test).subscribe({
-      next: resp => console.log(resp),
-      error: err => console.error(err)
-    })
+    const test: Credentials = { email: 'nonso@ok.com', password: 'password' }
+
+    this._auth[this.formConfig.method](test).pipe(
+      finalize(() => this.hasResp.set(true))
+    ).subscribe({
+      next: resp => this.modalJson.set(resp),
+      error: err => this.modalJson.set(err.error)
+    });
   }
 }

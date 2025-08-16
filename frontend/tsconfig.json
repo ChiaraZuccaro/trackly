@@ -10,6 +10,7 @@
       "@pages/*": ["src/app/pages/*"],
       "@utils/*": ["src/app/utils/*"],
       "@ui/*": ["src/app/ui/*"],
+      "@enums/*": ["src/app/enums/*"],
       "@data/*": ["src/data/*"]
     },
     "strict": true,

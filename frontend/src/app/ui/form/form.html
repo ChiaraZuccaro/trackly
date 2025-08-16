@@ -27,3 +27,7 @@
     <button id="sub_btn" type="submit">Login</button>
   }
 </form>
+
+@if (hasResp()) {
+  <modal [apiResp]="modalJson()"></modal>
+}

@@ -7,7 +7,8 @@ export type InputType = 'email' | 'password' | 'text';
 export type AuthServiceMethods = {
   login: (params: Credentials) => ReturnType<AuthService['login']>;
   register: (params: Credentials) => ReturnType<AuthService['register']>;
-  // resetPassword: (email: string) => ReturnType<AuthService['resetPassword']>;
+  recoverPassword: (params: Credentials) => ReturnType<AuthService['recoverPassword']>;
+  resetPassword: (params: Credentials) => ReturnType<AuthService['resetPassword']>;
 };
 
 
@@ -36,6 +37,6 @@ export interface FormConfig {
 
 export interface Credentials {
   email: string,
-  pw: string,
+  password: string,
   name?: string
 }
