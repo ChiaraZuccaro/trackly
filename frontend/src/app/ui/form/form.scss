@@ -8,14 +8,14 @@ form {
     flex-direction: column;
     gap: .5rem;
 
-    input { border-bottom: 1px black solid; }
+    input { border-bottom: 1px var(--secondary-bg) solid; }
 
-    .errors { color: #c41b1b; }
+    .errors { color: var(--error); }
   }
 
   #sub_btn {
     align-self: center;
-    background-color: #373737;
+    background-color: var(--secondary-bg);
     color: rgb(223, 223, 223);
     border-radius: .3rem;
     width: 50%;
