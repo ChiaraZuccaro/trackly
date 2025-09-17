@@ -20,8 +20,11 @@ public class SecurityConfig {
   private List<String> allowedOrigins;
   private List<String> allowedMethods;
   private List<String> noTokenCall;
+  
+  private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
-  public SecurityConfig() {
+  public SecurityConfig(OAuth2SuccessHandler oAuth2SuccessHandler) {
+    this.oAuth2SuccessHandler = oAuth2SuccessHandler;
     this.allowedOrigins = List.of("http://localhost:1008");
     this.allowedMethods = List.of("GET", "POST", "PUT", "DELETE", "OPTIONS");
     this.noTokenCall = List.of(
@@ -58,6 +61,7 @@ public class SecurityConfig {
         .requestMatchers(this.noTokenCall.toArray(new String[0])).permitAll()
         .anyRequest().authenticated()
       )
+      .oauth2Login(oauth2 -> oauth2.successHandler(oAuth2SuccessHandler))
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
       .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
